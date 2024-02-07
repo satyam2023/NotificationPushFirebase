@@ -13,8 +13,9 @@ import {
 } from 'react-native';
 
 import messaging from '@react-native-firebase/messaging';
+import { getToken } from './src/utils/helper';
 
-import onDisplayNotification from './utils';
+import { onDisplayNotification } from './src/utils/helper';
 
 
 function App(): React.JSX.Element {
@@ -22,11 +23,7 @@ function App(): React.JSX.Element {
     getToken();
   },[]);
 
-  async function getToken(){
-    await messaging().registerDeviceForRemoteMessages();
-  const token = await messaging().getToken();
-  console.log("TOken::",token);
-  }
+  
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {

@@ -1,25 +1,24 @@
-import React from 'react';
-import { View, Button } from 'react-native';
 import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
 
-async function onDisplayNotification(body:string,title:string) {
-    // Request permissions (required for iOS)
-    await notifee.requestPermission()
-
-    // Create a channel (required for Android)
+async function onDisplayNotification(title:any,body:any) {
+  
+    await notifee.requestPermission();
     const channelId = await notifee.createChannel({
       id: 'default',
       name: 'Default Channel',
+      badge:true
     });
 
-    // Display a notification
+    
     await notifee.displayNotification({
-      title: title,
-      body:body,
+      title:`<p style="color: #4caf50;"><b>${title}</span></p></b></p> &#128576;`,
+      body: ` <p style="color:#2EF4D17A;"><b>${body}</b></p>`,
       android: {
         channelId,
+        color: '#E8210C',
+        // largeIcon:'https://icons8.com/icon/13717/notification',
         // smallIcon: 'name-of-a-small-icon', // optional, defaults to 'ic_launcher'.
-        // pressAction is needed if you want the notification to open the app when pressed
         pressAction: {
           id: 'default',
         },
@@ -27,4 +26,10 @@ async function onDisplayNotification(body:string,title:string) {
     });
   };
 
-  export  default onDisplayNotification;
+  async function getToken(){
+    await messaging().registerDeviceForRemoteMessages();
+  const token = await messaging().getToken();
+  console.log("TOken::",token);
+  }
+
+  export { getToken,onDisplayNotification};
